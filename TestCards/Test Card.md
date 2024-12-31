@@ -1,4 +1,4 @@
-#attack
+#attack #include
 
 Card Info
 	This is dev info.
