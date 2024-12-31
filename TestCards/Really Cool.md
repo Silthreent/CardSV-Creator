@@ -1,4 +1,5 @@
 #spell #include
+>Cost: 3
 
 Card Info
 	This is dev info.
