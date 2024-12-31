@@ -6,4 +6,5 @@ Card Info
 	It should be ignored.
 	
 ### Card Text
+<h2>Test</h2>
 This is the card text. It does something cool, I swear!

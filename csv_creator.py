@@ -24,7 +24,8 @@ def read_card_file(card_path):
             if "# Card Text" in line:
                 print("Card text found")
                 for line in file:
-                    columns["text"] = line
+                    columns["text"] += line.strip() + "\\n"
+                columns["text"] = columns["text"][:-2]
             elif line[0] == ">":
                 split = line[1:].strip().lower().rsplit(": ")
                 print(f"Import tag '{split[0]}' found, setting to '{split[1]}'")
