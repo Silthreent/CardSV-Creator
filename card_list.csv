@@ -1,5 +1,5 @@
 name,count,text,cost
-Really Cool,1,"<h2>Test</h2>\nThis is the card text. It does something cool, I swear!",3
+Really Cool,1,"<h2>Test</h2>This is the card text. It does something cool, I swear!",3
 Test Card,1,Multiline text test.\nThis is the card text. This card does nothing!,0
 Hidden Card,1,This is a top secret card text. Congrats on finding it an entire folder deep!,0
 Top Secret,1,This is a super top secret card text. Congrats on finding it an entire TWO folders deep!,0
