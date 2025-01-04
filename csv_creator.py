@@ -7,19 +7,28 @@ config = configparser.ConfigParser()
 config.read("default_config.ini")
 config.read("custom_config.ini")
 
+# Read a single file as a row in the CSV, as a single card
 def read_card_file(card_path):
     print(f"Attempting load of '{card_path}'")
 
     with open(card_path) as file:
-        # Card was not told to be included, skip
         if("#include" not in file.readline()):
+            # Card was not told to be included, skip
+
             print("No #include, skipping")
             return []
 
         # Prepare the row with all the default column data
         columns = {}
         for tag in config["columns"]:
-            columns[tag] = config["columns"][tag]
+            # Leading @ means a built-in column with custom loading
+            if(tag[0] == "@"):
+                print(f"Loading built in tag {tag}")
+                if(tag.lower() == "@dir"):
+                    columns[config["columns"][tag]] = card_path.split("\\")[-2]
+            # All other columns get their default value from config
+            else:
+                columns[tag] = config["columns"][tag]
 
         columns["name"] = card_path.rsplit("\\")[-1][0:-3]
 
@@ -30,7 +39,7 @@ def read_card_file(card_path):
 
                 print("Card text found")
                 for line in file:
-                    # If the line has an HTML header tag, it doesn't need a new line added
+                    # If the line has an HTML header tag, it doesn't need a new line added and needs it's new line removed
                     if("<h" in line):
                         columns["text"] += line.strip()
                     # Otherwise, just replace any newlines with an escape character'd one so it loads correctly
@@ -56,7 +65,13 @@ def create_csv():
         # Load all columns from the config file, default and user defined ones
         columns = []
         for tag in config["columns"]:
-            columns.append(tag)
+            # Leading @ means it's a built-in column
+            # The name of the column becomes the value of the config entry
+            if(tag[0] == "@"):
+                columns.append(config["columns"][tag])
+            # All other column names become the key
+            else:
+                columns.append(tag)
         csvwriter.writerow(columns)
         
         # Start going through the directory, defined in the config file
