@@ -59,31 +59,35 @@ def read_card_file(card_path):
 
 # Start creating the CSV file
 def create_csv():
-    # Create the CSV file for editing
-    with open("card_list.csv", 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    # Start going through all the directories the user has chosen
+    for dir in config["directories"]:
+        print(f"Begin loading directory '{dir}'")
 
-        # Load all columns from the config file, default and user defined ones
-        columns = []
-        for tag in config["columns"]:
-            # Leading @ means it's a built-in column
-            # The name of the column becomes the value of the config entry
-            if(tag[0] == "@"):
-                columns.append(config["columns"][tag])
-            # All other column names become the key
-            else:
-                columns.append(tag)
-        csvwriter.writerow(columns)
-        
-        # Start going through the directory, defined in the config file
-        # Every file found is attempted to be loaded
-        for (root, dirs, files) in os.walk(config["loading"]["FolderPath"]):
-            for file in files:
-                card_data = read_card_file(os.path.join(root, file))
+        # Create the CSV file for editing
+        with open(f"{dir}.csv", 'w', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-                # Don't write the card if it failed to create for any reason
-                if(len(card_data) > 0):
-                    csvwriter.writerow(card_data.values())
+            # Load all columns from the config file, default and user defined ones
+            columns = []
+            for tag in config["columns"]:
+                # Leading @ means it's a built-in column
+                # The name of the column becomes the value of the config entry
+                if(tag[0] == "@"):
+                    columns.append(config["columns"][tag])
+                # All other column names become the key
+                else:
+                    columns.append(tag)
+            csvwriter.writerow(columns)
+
+            # Start going through the directory, defined in the config file
+            # Every file found is attempted to be loaded
+            for (root, dirs, files) in os.walk(config["directories"][dir]):
+                for file in files:
+                    card_data = read_card_file(os.path.join(root, file))
+
+                    # Don't write the card if it failed to create for any reason
+                    if(len(card_data) > 0):
+                        csvwriter.writerow(card_data.values())
 
 print("Starting card loader...")
 
