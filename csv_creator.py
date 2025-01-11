@@ -24,6 +24,7 @@ def read_card_file(card_path):
             # Leading @ means a built-in column with custom loading
             if(tag[0] == "@"):
                 print(f"Loading built in tag {tag}")
+                # DIR column is set to the name of the folder it's located in
                 if(tag.lower() == "@dir"):
                     columns[config["columns"][tag]] = card_path.split("\\")[-2]
             # All other columns get their default value from config
@@ -39,12 +40,12 @@ def read_card_file(card_path):
 
                 print("Card text found")
                 for line in file:
-                    # If the line has an HTML header tag, it doesn't need a new line added and needs it's new line removed
+                    # If the line has an HTML header tag, it doesn't need a new line added and needs its new line removed
                     if("<h" in line):
                         columns["text"] += line.strip()
-                    # Otherwise, just replace any newlines with an escape character'd one so it loads correctly
+                    # Otherwise, just replace any newlines with an HTML one
                     else:
-                        columns["text"] += line.replace("\n", "\\n")
+                        columns["text"] += line.replace("\n", "<br>")
             elif line[0] == ">":
                 # Load user defined column data
 
